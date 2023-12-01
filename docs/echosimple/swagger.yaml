@@ -1,0 +1,166 @@
+basePath: /
+definitions:
+  entity.DogBreedsResponse:
+    properties:
+      message:
+        additionalProperties:
+          items:
+            type: string
+          type: array
+        type: object
+      status:
+        type: string
+    type: object
+  entity.DogPayload:
+    properties:
+      breeds:
+        type: string
+      gender:
+        type: string
+      image:
+        type: string
+      name:
+        type: string
+    type: object
+  entity.DogSubBreedResponse:
+    properties:
+      message:
+        items:
+          type: string
+        type: array
+      status:
+        type: string
+    type: object
+host: localhost:2000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Echo Swagger Example API
+  version: "1.0"
+paths:
+  /breed/{sub-breed}/list:
+    get:
+      description: Get a list of dog sub breed
+      operationId: get-sub-breeds
+      parameters:
+      - default: doberman
+        description: Sub-breed name
+        format: doberman
+        in: path
+        name: sub-breed
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.DogSubBreedResponse'
+      summary: Get all sub breed
+  /breeds/list/all:
+    get:
+      description: Get a list of all dog breeds
+      operationId: get-all-breeds
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.DogBreedsResponse'
+      summary: Get all dog breeds
+  /dog/{id}:
+    delete:
+      description: Delete a dog
+      operationId: delete-dog
+      parameters:
+      - default: uuid
+        description: Dog ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete Dog
+    get:
+      description: Get Dog Detail By ID
+      operationId: get-dog-by-id
+      parameters:
+      - default: uuid
+        description: Dog ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get Dog Detail
+    put:
+      description: Update a dog
+      operationId: Update-dog
+      parameters:
+      - default: uuid
+        description: Dog ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Sub-breed data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.DogPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update Dog
+  /dogs:
+    get:
+      description: Get List of Dogs
+      operationId: get-dogs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get Dogs
+    post:
+      description: Create a dog
+      operationId: create-dogs
+      parameters:
+      - description: Sub-breed data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.DogPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create Dog
+schemes:
+- http
+swagger: "2.0"
