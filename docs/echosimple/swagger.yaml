@@ -1,166 +1,225 @@
-basePath: /
 definitions:
-  entity.DogBreedsResponse:
+  entity.Login:
     properties:
-      message:
-        additionalProperties:
-          items:
-            type: string
-          type: array
-        type: object
-      status:
+      email:
+        type: string
+      password:
         type: string
     type: object
-  entity.DogPayload:
+  entity.MonsterPayload:
     properties:
-      breeds:
+      description:
         type: string
-      gender:
-        type: string
+      height:
+        type: number
       image:
         type: string
+      monster_category_id:
+        type: integer
       name:
         type: string
-    type: object
-  entity.DogSubBreedResponse:
-    properties:
-      message:
+      stats_attack:
+        type: integer
+      stats_defense:
+        type: integer
+      stats_hp:
+        type: integer
+      stats_speed:
+        type: integer
+      types_id:
         items:
-          type: string
+          type: integer
         type: array
-      status:
+      weight:
+        type: number
+    type: object
+  entity.RegisterPayload:
+    properties:
+      email:
+        type: string
+      fullname:
+        type: string
+      password:
         type: string
     type: object
-host: localhost:2000
+  entity.StatusPayload:
+    properties:
+      status:
+        type: boolean
+    type: object
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server server.
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
-  title: Echo Swagger Example API
-  version: "1.0"
+  contact: {}
 paths:
-  /breed/{sub-breed}/list:
-    get:
-      description: Get a list of dog sub breed
-      operationId: get-sub-breeds
-      parameters:
-      - default: doberman
-        description: Sub-breed name
-        format: doberman
-        in: path
-        name: sub-breed
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entity.DogSubBreedResponse'
-      summary: Get all sub breed
-  /breeds/list/all:
-    get:
-      description: Get a list of all dog breeds
-      operationId: get-all-breeds
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entity.DogBreedsResponse'
-      summary: Get all dog breeds
-  /dog/{id}:
-    delete:
-      description: Delete a dog
-      operationId: delete-dog
-      parameters:
-      - default: uuid
-        description: Dog ID
-        format: uuid
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Delete Dog
-    get:
-      description: Get Dog Detail By ID
-      operationId: get-dog-by-id
-      parameters:
-      - default: uuid
-        description: Dog ID
-        format: uuid
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Get Dog Detail
-    put:
-      description: Update a dog
-      operationId: Update-dog
-      parameters:
-      - default: uuid
-        description: Dog ID
-        format: uuid
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Sub-breed data
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/entity.DogPayload'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Update Dog
-  /dogs:
-    get:
-      description: Get List of Dogs
-      operationId: get-dogs
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Get Dogs
+  /api/v1/login:
     post:
-      description: Create a dog
-      operationId: create-dogs
+      description: login a user
+      operationId: login-user
       parameters:
-      - description: Sub-breed data
+      - description: Login Payload
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.DogPayload'
+          $ref: '#/definitions/entity.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Login User
+  /api/v1/monster:
+    post:
+      description: create a Monsters
+      operationId: create-monsters
+      parameters:
+      - default: Bearer your_token_here
+        description: Bearer token
+        in: header
+        name: Authorization
+        type: string
+      - description: Monster Payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.MonsterPayload'
       produces:
       - application/json
       responses:
         "201":
           description: Created
-      summary: Create Dog
-schemes:
-- http
+      summary: Create Monsters
+  /api/v1/monster/{id}:
+    put:
+      description: Update a Monsters
+      operationId: update-monsters
+      parameters:
+      - default: Bearer your_token_here
+        description: Bearer token
+        in: header
+        name: Authorization
+        type: string
+      - description: Monster ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Monster Payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.MonsterPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update Monsters
+  /api/v1/monster/catch/{id}:
+    post:
+      description: Update status of Monsters
+      operationId: catch-monsters
+      parameters:
+      - default: Bearer your_token_here
+        description: Bearer token
+        in: header
+        name: Authorization
+        type: string
+      - description: Monster ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Catch Monsters
+  /api/v1/monster/status/{id}:
+    put:
+      description: Update status of Monsters
+      operationId: update-status-monsters
+      parameters:
+      - default: Bearer your_token_here
+        description: Bearer token
+        in: header
+        name: Authorization
+        type: string
+      - description: Monster ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Status Payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.StatusPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update Status Monsters
+  /api/v1/monsters:
+    get:
+      description: Get a list of Monsters
+      operationId: get-monsters
+      parameters:
+      - default: Bearer your_token_here
+        description: Bearer token
+        in: header
+        name: Authorization
+        type: string
+      - description: ID of the monster
+        in: query
+        name: monster_id
+        type: integer
+      - description: Where monster name is (Charizard, Turquise)
+        in: query
+        name: name
+        type: string
+      - description: Where monster is Catched (true, false)
+        in: query
+        name: is_catched
+        type: string
+      - collectionFormat: multi
+        description: Type of monsters
+        in: query
+        items:
+          type: string
+        name: type
+        type: array
+      - description: Order by field (e.g., name, id)
+        in: query
+        name: order_by
+        type: string
+      - description: Order type (e.g., asc, desc)
+        in: query
+        name: order_type
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get Monsters
+  /api/v1/register:
+    post:
+      description: register a user
+      operationId: register-user
+      parameters:
+      - description: Register Payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.RegisterPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Register User
 swagger: "2.0"

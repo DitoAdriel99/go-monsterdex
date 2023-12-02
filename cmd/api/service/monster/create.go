@@ -24,6 +24,14 @@ func (s *_Service) Create(req *entity.MonsterPayload) (*entity.Monster, error) {
 		return nil, err
 	}
 
+	if _, err := s.repo.MonsterCategoryRepo.GetId(req.MonsterCategoryID); err != nil {
+		return nil, err
+	}
+
+	if _, err := s.repo.MonsterTypeRepo.GetIds(req.TypesID); err != nil {
+		return nil, err
+	}
+
 	data := entity.Monster{
 		Name:              req.Name,
 		MonsterCategoryID: req.MonsterCategoryID,
@@ -89,7 +97,6 @@ func (s *_Service) Create(req *entity.MonsterPayload) (*entity.Monster, error) {
 		log.Printf("error signed to gcs", err)
 		return nil, err
 	}
-	// res := storage.Uploader.Put(context.Background(), os.Getenv("GCS_BUCKET"), "test-files/", []byte(data.Image), false, mType)
 
 	data.ID = currId
 	data.Image = *signedUrl

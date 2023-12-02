@@ -18,6 +18,13 @@ func NewHandlers(service *service.Service) *_Handlers {
 	return &_Handlers{service: service}
 }
 
+// @Summary Register User
+// @Description register a user
+// @ID register-user
+// @Produce json
+// @Param request body entity.RegisterPayload true "Register Payload"
+// @Success 201
+// @Router /api/v1/register [post]
 func (h *_Handlers) RegisterHandler(c echo.Context) error {
 	var (
 		payload      entity.RegisterPayload
@@ -38,9 +45,16 @@ func (h *_Handlers) RegisterHandler(c echo.Context) error {
 
 	log.Println("register success...")
 
-	return c.JSON(http.StatusOK, succResponse.WithData(respData))
+	return c.JSON(http.StatusCreated, succResponse.WithData(respData))
 }
 
+// @Summary Login User
+// @Description login a user
+// @ID login-user
+// @Produce json
+// @Param request body entity.Login true "Login Payload"
+// @Success 200
+// @Router /api/v1/login [post]
 func (h *_Handlers) LoginHandler(c echo.Context) error {
 	var (
 		payload      entity.Login

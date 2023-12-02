@@ -5,6 +5,7 @@ import (
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/presentation"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/repository"
 	"github.com/DitoAdriel99/go-monsterdex/pkg/meta"
+	"github.com/go-redis/redis/v8"
 )
 
 type Contract interface {
@@ -18,8 +19,9 @@ type Contract interface {
 
 type _Service struct {
 	repo *repository.Repo
+	rdb  *redis.Client
 }
 
-func NewService(repo *repository.Repo) Contract {
-	return &_Service{repo}
+func NewService(repo *repository.Repo, rdb *redis.Client) Contract {
+	return &_Service{repo, rdb}
 }

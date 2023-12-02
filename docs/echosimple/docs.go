@@ -9,82 +9,90 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/breed/{sub-breed}/list": {
-            "get": {
-                "description": "Get a list of dog sub breed",
+        "/api/v1/login": {
+            "post": {
+                "description": "login a user",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get all sub breed",
-                "operationId": "get-sub-breeds",
+                "summary": "Login User",
+                "operationId": "login-user",
                 "parameters": [
                     {
-                        "type": "string",
-                        "format": "doberman",
-                        "default": "doberman",
-                        "description": "Sub-breed name",
-                        "name": "sub-breed",
-                        "in": "path",
-                        "required": true
+                        "description": "Login Payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Login"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entity.DogSubBreedResponse"
-                        }
+                        "description": "OK"
                     }
                 }
             }
         },
-        "/breeds/list/all": {
-            "get": {
-                "description": "Get a list of all dog breeds",
+        "/api/v1/monster": {
+            "post": {
+                "description": "create a Monsters",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get all dog breeds",
-                "operationId": "get-all-breeds",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entity.DogBreedsResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/dog/{id}": {
-            "get": {
-                "description": "Get Dog Detail By ID",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get Dog Detail",
-                "operationId": "get-dog-by-id",
+                "summary": "Create Monsters",
+                "operationId": "create-monsters",
                 "parameters": [
                     {
                         "type": "string",
-                        "format": "uuid",
-                        "default": "uuid",
-                        "description": "Dog ID",
+                        "default": "Bearer your_token_here",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "description": "Monster Payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.MonsterPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/api/v1/monster/catch/{id}": {
+            "post": {
+                "description": "Update status of Monsters",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Catch Monsters",
+                "operationId": "catch-monsters",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer your_token_here",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Monster ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -95,56 +103,39 @@ const docTemplate = `{
                         "description": "OK"
                     }
                 }
-            },
+            }
+        },
+        "/api/v1/monster/status/{id}": {
             "put": {
-                "description": "Update a dog",
+                "description": "Update status of Monsters",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update Dog",
-                "operationId": "Update-dog",
+                "summary": "Update Status Monsters",
+                "operationId": "update-status-monsters",
                 "parameters": [
                     {
                         "type": "string",
-                        "format": "uuid",
-                        "default": "uuid",
-                        "description": "Dog ID",
+                        "default": "Bearer your_token_here",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Monster ID",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "Sub-breed data",
+                        "description": "Status Payload",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.DogPayload"
+                            "$ref": "#/definitions/entity.StatusPayload"
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            },
-            "delete": {
-                "description": "Delete a dog",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Delete Dog",
-                "operationId": "delete-dog",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "format": "uuid",
-                        "default": "uuid",
-                        "description": "Dog ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -154,35 +145,122 @@ const docTemplate = `{
                 }
             }
         },
-        "/dogs": {
-            "get": {
-                "description": "Get List of Dogs",
+        "/api/v1/monster/{id}": {
+            "put": {
+                "description": "Update a Monsters",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get Dogs",
-                "operationId": "get-dogs",
+                "summary": "Update Monsters",
+                "operationId": "update-monsters",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer your_token_here",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Monster ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Monster Payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.MonsterPayload"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     }
                 }
-            },
-            "post": {
-                "description": "Create a dog",
+            }
+        },
+        "/api/v1/monsters": {
+            "get": {
+                "description": "Get a list of Monsters",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Create Dog",
-                "operationId": "create-dogs",
+                "summary": "Get Monsters",
+                "operationId": "get-monsters",
                 "parameters": [
                     {
-                        "description": "Sub-breed data",
+                        "type": "string",
+                        "default": "Bearer your_token_here",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID of the monster",
+                        "name": "monster_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Where monster name is (Charizard, Turquise)",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Where monster is Catched (true, false)",
+                        "name": "is_catched",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "Type of monsters",
+                        "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by field (e.g., name, id)",
+                        "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order type (e.g., asc, desc)",
+                        "name": "order_type",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/register": {
+            "post": {
+                "description": "register a user",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Register User",
+                "operationId": "register-user",
+                "parameters": [
+                    {
+                        "description": "Register Payload",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.DogPayload"
+                            "$ref": "#/definitions/entity.RegisterPayload"
                         }
                     }
                 ],
@@ -195,51 +273,77 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entity.DogBreedsResponse": {
+        "entity.Login": {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
+                "email": {
+                    "type": "string"
                 },
-                "status": {
+                "password": {
                     "type": "string"
                 }
             }
         },
-        "entity.DogPayload": {
+        "entity.MonsterPayload": {
             "type": "object",
             "properties": {
-                "breeds": {
+                "description": {
                     "type": "string"
                 },
-                "gender": {
-                    "type": "string"
+                "height": {
+                    "type": "number"
                 },
                 "image": {
                     "type": "string"
                 },
+                "monster_category_id": {
+                    "type": "integer"
+                },
                 "name": {
+                    "type": "string"
+                },
+                "stats_attack": {
+                    "type": "integer"
+                },
+                "stats_defense": {
+                    "type": "integer"
+                },
+                "stats_hp": {
+                    "type": "integer"
+                },
+                "stats_speed": {
+                    "type": "integer"
+                },
+                "types_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "weight": {
+                    "type": "number"
+                }
+            }
+        },
+        "entity.RegisterPayload": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 }
             }
         },
-        "entity.DogSubBreedResponse": {
+        "entity.StatusPayload": {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "status": {
-                    "type": "string"
+                    "type": "boolean"
                 }
             }
         }
@@ -248,12 +352,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:2000",
-	BasePath:         "/",
-	Schemes:          []string{"http"},
-	Title:            "Echo Swagger Example API",
-	Description:      "This is a sample server server.",
+	Version:          "",
+	Host:             "",
+	BasePath:         "",
+	Schemes:          []string{},
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

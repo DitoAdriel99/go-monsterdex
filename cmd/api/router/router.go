@@ -3,6 +3,7 @@ package router
 import (
 	"context"
 
+	"github.com/DitoAdriel99/go-monsterdex/bootstrap"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/handlers"
 	authHandl "github.com/DitoAdriel99/go-monsterdex/cmd/api/handlers/auth"
@@ -32,14 +33,12 @@ import (
 // @host localhost:2000
 // @BasePath /
 // @schemes http
-
 func New() *echo.Echo {
 	e := echo.New()
 	repo := repository.NewRepo()
-	// sdk := sdk.NewSDK(os.Getenv("DOG_URL"))
-	// rdb := bootstrap.NewRedisClient(os.Getenv("REDIS_HOST"), os.Getenv("REDIS_PASSWORD"))
+	rdb := bootstrap.NewRedisClient()
 
-	serv := service.NewService(repo)
+	serv := service.NewService(repo, rdb)
 
 	context.Background()
 

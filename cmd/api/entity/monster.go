@@ -9,6 +9,10 @@ import (
 )
 
 var (
+	MonsterRedisKey errbank.Error = "monster-"
+)
+
+var (
 	ErrAlreadyActive   errbank.Error = "This monster is already Active!"
 	ErrAlreadyDeactive errbank.Error = "This monster is already Deactive!"
 )

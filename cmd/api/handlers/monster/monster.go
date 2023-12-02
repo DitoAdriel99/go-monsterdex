@@ -20,6 +20,14 @@ func NewHandlers(service *service.Service) *_Handlers {
 	return &_Handlers{service: service}
 }
 
+// @Summary Create Monsters
+// @Description create a Monsters
+// @ID create-monsters
+// @Produce json
+// @Param Authorization header string false "Bearer token" default(Bearer your_token_here)
+// @Param request body entity.MonsterPayload true "Monster Payload"
+// @Success 201
+// @Router /api/v1/monster [post]
 func (h *_Handlers) CreateMonsterHandler(c echo.Context) error {
 	var (
 		payload      entity.MonsterPayload
@@ -39,9 +47,21 @@ func (h *_Handlers) CreateMonsterHandler(c echo.Context) error {
 	}
 
 	log.Println("create monster success....")
-	return c.JSON(http.StatusOK, succResponse.WithData(data))
+	return c.JSON(http.StatusCreated, succResponse.WithData(data))
 }
 
+// @Summary Get Monsters
+// @Description Get a list of Monsters
+// @ID get-monsters
+// @Produce json
+// @Param Authorization header string false "Bearer token" default(Bearer your_token_here)
+// @Param monster_id query int false "ID of the monster"
+// @Param name query string false "Where monster name is (Charizard, Turquise)"
+// @Param is_catched query string false "Where monster is Catched (true, false)"
+// @Param type query []string false "Type of monsters" collectionFormat(multi)
+// @Param order_by query string false "Order by field (e.g., name, id)"
+// @Param order_type query string false "Order type (e.g., asc, desc)"
+// @Router /api/v1/monsters [get]
 func (h *_Handlers) GetMonstersHandler(c echo.Context) error {
 	var (
 		succResponse = response.NewResponse().WithStatus("success").WithMessage("success")
@@ -74,6 +94,15 @@ func (h *_Handlers) GetMonstersHandler(c echo.Context) error {
 	}
 }
 
+// @Summary Update Monsters
+// @Description Update a Monsters
+// @ID update-monsters
+// @Produce json
+// @Param Authorization header string false "Bearer token" default(Bearer your_token_here)
+// @Param id path int true "Monster ID"
+// @Param request body entity.MonsterPayload true "Monster Payload"
+// @Success 200
+// @Router /api/v1/monster/{id} [put]
 func (h *_Handlers) UpdateMonsterHandler(c echo.Context) error {
 	var (
 		payload      entity.MonsterPayload
@@ -106,6 +135,15 @@ func (h *_Handlers) UpdateMonsterHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, succResponse.WithData(data))
 }
 
+// @Summary Update Status Monsters
+// @Description Update status of Monsters
+// @ID update-status-monsters
+// @Produce json
+// @Param Authorization header string false "Bearer token" default(Bearer your_token_here)
+// @Param id path int true "Monster ID"
+// @Param request body entity.StatusPayload true "Status Payload"
+// @Success 200
+// @Router /api/v1/monster/status/{id} [put]
 func (h *_Handlers) SetStatusMonsterHandler(c echo.Context) error {
 	var (
 		payload      entity.StatusPayload
@@ -138,6 +176,14 @@ func (h *_Handlers) SetStatusMonsterHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, succResponse.WithData("Success Set Status!"))
 }
 
+// @Summary Catch Monsters
+// @Description Update status of Monsters
+// @ID catch-monsters
+// @Produce json
+// @Param Authorization header string false "Bearer token" default(Bearer your_token_here)
+// @Param id path int true "Monster ID"
+// @Success 200
+// @Router /api/v1/monster/catch/{id} [post]
 func (h *_Handlers) CatchMonsterHandler(c echo.Context) error {
 	var (
 		succResponse = response.NewResponse().WithStatus("success").WithMessage("success")
