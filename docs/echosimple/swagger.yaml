@@ -48,7 +48,7 @@ definitions:
       status:
         type: boolean
     type: object
-host: http://35.188.107.108
+host: 35.188.107.108:3000
 info:
   contact:
     email: support@swagger.io
@@ -243,6 +243,12 @@ paths:
         "201":
           description: Created
       summary: Register User
+  /check-health:
+    get:
+      description: Check server is running
+      operationId: check-health
+      responses: {}
+      summary: Check Health
 schemes:
 - http
 swagger: "2.0"

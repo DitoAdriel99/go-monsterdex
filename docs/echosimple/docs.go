@@ -291,6 +291,14 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/check-health": {
+            "get": {
+                "description": "Check server is running",
+                "summary": "Check Health",
+                "operationId": "check-health",
+                "responses": {}
+            }
         }
     },
     "definitions": {
@@ -374,7 +382,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "http://35.188.107.108",
+	Host:             "35.188.107.108:3000",
 	BasePath:         "/",
 	Schemes:          []string{"http"},
 	Title:            "Monsterdex Enpoints",
