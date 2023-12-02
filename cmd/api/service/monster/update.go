@@ -62,7 +62,6 @@ func (s *_Service) Update(monsterID int, req *entity.MonsterPayload) (*entity.Mo
 		}
 
 		mType := getFileExtension(req.Image)
-		fmt.Println("mt", mType)
 
 		if isValid := rules.IsAllowedImageExtension(mType); !isValid {
 			return nil, entity.CustomError("Extension is not valid!")

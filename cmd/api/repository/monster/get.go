@@ -103,8 +103,6 @@ func (r *_Repo) Get(userID int, m *meta.Metadata) (*presentation.Monsters, error
 
 	stmt += ";"
 
-	fmt.Println("stmt", stmt)
-
 	rows, err := r.conn.Query(stmt, args...)
 	if err != nil {
 		return nil, err

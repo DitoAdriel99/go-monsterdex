@@ -43,6 +43,7 @@ func (h *_Handlers) CreateMonsterHandler(c echo.Context) error {
 
 	data, err := h.service.MonsterService.Create(&payload)
 	if err != nil {
+		log.Println("create monster error", err)
 		return c.JSON(http.StatusBadRequest, errResponse.WithError(err))
 	}
 
@@ -132,6 +133,7 @@ func (h *_Handlers) UpdateMonsterHandler(c echo.Context) error {
 
 	data, err := h.service.MonsterService.Update(intID, &payload)
 	if err != nil {
+		log.Println("update monster error", err)
 		return c.JSON(http.StatusBadRequest, errResponse.WithError(err))
 	}
 
