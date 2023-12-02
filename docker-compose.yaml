@@ -24,4 +24,4 @@ services:
       - .env
 
     ports:
-      - ${PORT}:2000
+      - 80:2000
