@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   entity.Login:
     properties:
@@ -47,8 +48,19 @@ definitions:
       status:
         type: boolean
     type: object
+host: http://35.188.107.108
 info:
-  contact: {}
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Monsterdex Enpoints
+  version: "1.0"
 paths:
   /api/v1/login:
     post:
@@ -166,7 +178,8 @@ paths:
       summary: Update Status Monsters
   /api/v1/monsters:
     get:
-      description: Get a list of Monsters
+      description: Get a list of Monsters Or Get Detail of Monster using Query Param
+        "monster_id"
       operationId: get-monsters
       parameters:
       - default: Bearer your_token_here
@@ -201,6 +214,14 @@ paths:
         in: query
         name: order_type
         type: string
+      - description: Order type (e.g., asc, desc)
+        in: query
+        name: page
+        type: string
+      - description: Order type (e.g., asc, desc)
+        in: query
+        name: per_page
+        type: string
       produces:
       - application/json
       responses: {}
@@ -222,4 +243,6 @@ paths:
         "201":
           description: Created
       summary: Register User
+schemes:
+- http
 swagger: "2.0"

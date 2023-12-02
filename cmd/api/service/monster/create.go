@@ -12,6 +12,7 @@ import (
 
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
 	"github.com/DitoAdriel99/go-monsterdex/pkg/storage"
+	"github.com/DitoAdriel99/go-monsterdex/rules"
 	"github.com/google/uuid"
 )
 
@@ -22,6 +23,16 @@ func (s *_Service) Create(req *entity.MonsterPayload) (*entity.Monster, error) {
 
 	if err := req.Validate(); err != nil {
 		return nil, err
+	}
+
+	if isValid := rules.IsValidBase64(req.Image); !isValid {
+		return nil, entity.CustomError("Image is not valid!")
+	}
+
+	mType := getFileExtension(req.Image)
+
+	if isValid := rules.IsAllowedImageExtension(mType); !isValid {
+		return nil, entity.CustomError("Extension is not valid!")
 	}
 
 	if _, err := s.repo.MonsterCategoryRepo.GetId(req.MonsterCategoryID); err != nil {
@@ -48,8 +59,6 @@ func (s *_Service) Create(req *entity.MonsterPayload) (*entity.Monster, error) {
 		CreatedAt:         timeNow,
 		UpdatedAt:         timeNow,
 	}
-
-	mType := getFileExtension(data.Image)
 
 	decoded, err := base64.StdEncoding.DecodeString(data.Image)
 	if err != nil {

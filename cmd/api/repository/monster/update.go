@@ -29,21 +29,22 @@ func (r *_Repo) Update(monsterID int, req *entity.Monster) error {
 			name = $1, 
 			monster_category_id = $2, 
 			description= $3, 
-			types_id = $4, 
-			height = $5, 
-			weight = $6, 
-			stats_hp = $7, 
-			stats_attack = $8, 
-			stats_defense = $9, 
-			stats_speed = $10,
-			updated_at = $11
+			image = $4,
+			types_id = $5, 
+			height = $6, 
+			weight = $7, 
+			stats_hp = $8, 
+			stats_attack = $9, 
+			stats_defense = $10, 
+			stats_speed = $11,
+			updated_at = $12
 		WHERE
-			id = $12
+			id = $13
 	`
 
 	typeArray := pq.Array(req.TypesID)
 
-	if _, err := tx.Exec(queryUpdateMons, req.Name, req.MonsterCategoryID, req.Description, typeArray, req.Height, req.Weight, req.StatsHP, req.StatsAttack, req.StatsDefense, req.StatsSpeed, req.UpdatedAt, monsterID); err != nil {
+	if _, err := tx.Exec(queryUpdateMons, req.Name, req.MonsterCategoryID, req.Description, req.Image, typeArray, req.Height, req.Weight, req.StatsHP, req.StatsAttack, req.StatsDefense, req.StatsSpeed, req.UpdatedAt, monsterID); err != nil {
 		log.Printf("error execute query update: %v", err)
 		return err
 	}

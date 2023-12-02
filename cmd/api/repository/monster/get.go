@@ -93,7 +93,17 @@ func (r *_Repo) Get(userID int, m *meta.Metadata) (*presentation.Monsters, error
 		stmt += " ORDER BY mn.id DESC"
 	}
 
+	if q.Limit > 0 {
+		stmt += fmt.Sprintf(" LIMIT %d", q.Limit)
+	}
+
+	if q.Offset > 0 {
+		stmt += fmt.Sprintf(" OFFSET %d", q.Offset)
+	}
+
 	stmt += ";"
+
+	fmt.Println("stmt", stmt)
 
 	rows, err := r.conn.Query(stmt, args...)
 	if err != nil {

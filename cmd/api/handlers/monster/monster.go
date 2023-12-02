@@ -51,7 +51,7 @@ func (h *_Handlers) CreateMonsterHandler(c echo.Context) error {
 }
 
 // @Summary Get Monsters
-// @Description Get a list of Monsters
+// @Description Get a list of Monsters Or Get Detail of Monster using Query Param "monster_id"
 // @ID get-monsters
 // @Produce json
 // @Param Authorization header string false "Bearer token" default(Bearer your_token_here)
@@ -61,6 +61,8 @@ func (h *_Handlers) CreateMonsterHandler(c echo.Context) error {
 // @Param type query []string false "Type of monsters" collectionFormat(multi)
 // @Param order_by query string false "Order by field (e.g., name, id)"
 // @Param order_type query string false "Order type (e.g., asc, desc)"
+// @Param page query string false "Order type (e.g., asc, desc)"
+// @Param per_page query string false "Order type (e.g., asc, desc)"
 // @Router /api/v1/monsters [get]
 func (h *_Handlers) GetMonstersHandler(c echo.Context) error {
 	var (

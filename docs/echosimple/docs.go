@@ -9,7 +9,16 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -187,7 +196,7 @@ const docTemplate = `{
         },
         "/api/v1/monsters": {
             "get": {
-                "description": "Get a list of Monsters",
+                "description": "Get a list of Monsters Or Get Detail of Monster using Query Param \"monster_id\"",
                 "produces": [
                     "application/json"
                 ],
@@ -239,6 +248,18 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Order type (e.g., asc, desc)",
                         "name": "order_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order type (e.g., asc, desc)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order type (e.g., asc, desc)",
+                        "name": "per_page",
                         "in": "query"
                     }
                 ],
@@ -352,12 +373,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
-	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Version:          "1.0",
+	Host:             "http://35.188.107.108",
+	BasePath:         "/",
+	Schemes:          []string{"http"},
+	Title:            "Monsterdex Enpoints",
+	Description:      "This is a sample server server.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

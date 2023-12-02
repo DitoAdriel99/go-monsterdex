@@ -9,7 +9,7 @@ func (s *_Service) SetStatus(monsterID int, req *entity.StatusPayload) error {
 	if err := req.Validate(); err != nil {
 		return err
 	}
-	dataMonster, err := s.repo.MonsterRepo.GetIDAll(1, monsterID)
+	dataMonster, err := s.repo.MonsterRepo.GetID(1, monsterID)
 	if err != nil {
 		log.Printf("error getting id: %v", err)
 		return err

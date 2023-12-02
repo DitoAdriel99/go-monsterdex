@@ -1,8 +1,6 @@
 package router
 
 import (
-	"context"
-
 	"github.com/DitoAdriel99/go-monsterdex/bootstrap"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/handlers"
@@ -10,7 +8,8 @@ import (
 	monsterHandl "github.com/DitoAdriel99/go-monsterdex/cmd/api/handlers/monster"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/repository"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/service"
-	_ "github.com/DitoAdriel99/go-monsterdex/docs/echosimple"
+
+	// _ "github.com/DitoAdriel99/go-monsterdex/docs/echosimple"
 	midd "github.com/DitoAdriel99/go-monsterdex/middleware"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -18,29 +17,12 @@ import (
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
-// @title Echo Swagger Example API
-// @version 1.0
-// @description This is a sample server server.
-// @termsOfService http://swagger.io/terms/
-
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
-
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-
-// @host localhost:2000
-// @BasePath /
-// @schemes http
 func New() *echo.Echo {
 	e := echo.New()
 	repo := repository.NewRepo()
 	rdb := bootstrap.NewRedisClient()
 
 	serv := service.NewService(repo, rdb)
-
-	context.Background()
 
 	// declare handlers
 	authHandlers := authHandl.NewHandlers(serv)
@@ -70,7 +52,7 @@ func New() *echo.Echo {
 	api.GET("/monsters", monsterHandlers.GetMonstersHandler, midd.RBAC("admin", "user"))
 	api.PUT("/monster/:id", monsterHandlers.UpdateMonsterHandler, midd.RBAC("admin", "user"))
 	api.PUT("/monster/status/:id", monsterHandlers.SetStatusMonsterHandler, midd.RBAC("admin"))
-	api.POST("/monster/catch/:id", monsterHandlers.CatchMonsterHandler, midd.RBAC("admin", "user"))
+	api.POST("/monster/catch/:id", monsterHandlers.CatchMonsterHandler, midd.RBAC("user"))
 	// Serve Swagger documentation
 	e.GET("/*", echoSwagger.WrapHandler)
 
