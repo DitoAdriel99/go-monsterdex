@@ -21,6 +21,7 @@ COPY --from=builder /app/db/migrations /app/db/migrations
 COPY --from=builder /app/app /app/app
 COPY wait-for-it.sh /app/wait-for-it.sh
 COPY startup.sh /app/startup.sh
+COPY monsterfellowship.json /app/monsterfellowship.json
 
 # Make scripts executable
 RUN chmod +x /app/wait-for-it.sh

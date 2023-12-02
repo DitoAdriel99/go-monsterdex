@@ -77,6 +77,7 @@ func (h *_Handlers) GetMonstersHandler(c echo.Context) error {
 	if metadata.MonsterID != 0 {
 		data, err := h.service.MonsterService.GetID(bearer, metadata.MonsterID)
 		if err != nil {
+			log.Println("get monster by id error", err)
 			return c.JSON(http.StatusBadRequest, errResponse.WithError(err))
 		}
 
@@ -86,6 +87,7 @@ func (h *_Handlers) GetMonstersHandler(c echo.Context) error {
 	} else {
 		data, err := h.service.MonsterService.Get(bearer, &metadata)
 		if err != nil {
+			log.Println("get monster error", err)
 			return c.JSON(http.StatusBadRequest, errResponse.WithError(err))
 		}
 

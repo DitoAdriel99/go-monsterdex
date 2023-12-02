@@ -1,6 +1,8 @@
 package router
 
 import (
+	"fmt"
+
 	"github.com/DitoAdriel99/go-monsterdex/bootstrap"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/handlers"
@@ -35,7 +37,7 @@ func New() *echo.Echo {
 	}
 
 	e.Use(middleware.CORSWithConfig(corsConfig))
-
+	fmt.Println("asjnasjansjas")
 	// Health Check
 	e.GET("/health-check", handlers.HealthCheckHandler)
 
