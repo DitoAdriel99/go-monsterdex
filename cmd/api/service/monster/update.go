@@ -3,7 +3,6 @@ package monster
 import (
 	"context"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -22,7 +21,7 @@ func (s *_Service) Update(monsterID int, req *entity.MonsterPayload) (*entity.Mo
 		payl    = entity.Monster{}
 	)
 
-	dataMonster, err := s.repo.MonsterRepo.GetID(1, monsterID)
+	dataMonster, err := s.repo.MonsterRepo.GetIDByMonsterID(monsterID)
 	if err != nil {
 		log.Printf("error getting id: %v", err)
 		return nil, err
@@ -86,6 +85,19 @@ func (s *_Service) Update(monsterID int, req *entity.MonsterPayload) (*entity.Mo
 
 			uploadComplete <- imageStore
 		}()
+		select {
+		case imageStore := <-uploadComplete:
+			if imageStore != nil {
+				payl.Image = *imageStore
+			} else {
+				// Handle the error if the upload fails
+				return nil, entity.CustomError("error storing data to GCS")
+			}
+		case <-time.After(5 * time.Second): // Add a timeout to avoid waiting indefinitely
+			log.Println("Upload operation timed out")
+			return nil, entity.CustomError("upload operation timed out")
+		}
+
 	}
 
 	if len(req.TypesID) == 0 {
@@ -139,19 +151,6 @@ func (s *_Service) Update(monsterID int, req *entity.MonsterPayload) (*entity.Mo
 
 	payl.CreatedAt = dataMonster.CreatedAt
 	payl.UpdatedAt = timeNow
-
-	select {
-	case imageStore := <-uploadComplete:
-		if imageStore != nil {
-			payl.Image = *imageStore
-		} else {
-			// Handle the error if the upload fails
-			return nil, errors.New("error storing data to GCS")
-		}
-	case <-time.After(5 * time.Second): // Add a timeout to avoid waiting indefinitely
-		log.Println("Upload operation timed out")
-		return nil, errors.New("upload operation timed out")
-	}
 
 	if err := s.repo.MonsterRepo.Update(monsterID, &payl); err != nil {
 		log.Printf("error update monster: %v", err)

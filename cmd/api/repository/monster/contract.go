@@ -17,6 +17,7 @@ type Contract interface {
 	Create(userID int, req *entity.Monster) (int, error)
 	Get(userID int, m *meta.Metadata) (*presentation.Monsters, error)
 	GetID(userID int, monsterID int) (*presentation.Monster, error)
+	GetIDByMonsterID(monsterID int) (*presentation.Monster, error)
 	GetIDAll(userID int, monsterID int) (*presentation.Monster, error)
 	Update(monsterID int, req *entity.Monster) error
 	SetStatus(monsterID int, status bool) error

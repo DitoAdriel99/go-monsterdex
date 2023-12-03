@@ -49,7 +49,7 @@ func New() *echo.Echo {
 
 	api.POST("/monster", monsterHandlers.CreateMonsterHandler, midd.RBAC("admin"))
 	api.GET("/monsters", monsterHandlers.GetMonstersHandler, midd.RBAC("admin", "user"))
-	api.PUT("/monster/:id", monsterHandlers.UpdateMonsterHandler, midd.RBAC("admin", "user"))
+	api.PUT("/monster/:id", monsterHandlers.UpdateMonsterHandler, midd.RBAC("admin"))
 	api.PUT("/monster/status/:id", monsterHandlers.SetStatusMonsterHandler, midd.RBAC("admin"))
 	api.POST("/monster/catch/:id", monsterHandlers.CatchMonsterHandler, midd.RBAC("user"))
 	// Serve Swagger documentation
