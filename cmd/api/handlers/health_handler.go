@@ -8,8 +8,8 @@ import (
 
 // @Summary Check Health
 // @Description Check server is running
-// @ID check-health
-// @Router /check-health [get]
+// @ID health-check
+// @Router /health-check [get]
 func HealthCheckHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, "OK")
 }
