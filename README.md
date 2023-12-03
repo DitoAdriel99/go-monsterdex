@@ -26,11 +26,11 @@ The project follows a clean architecture pattern, separating concerns into diffe
 ### API Specification
 [API Specification](http://35.188.107.108:3000/swagger/index.html)
 
-### Database Schema
-![Database Schema](db_schema.png "DB Schema")
-
 ### Postman
 [API Specification](https://documenter.getpostman.com/view/28576845/2s9YeK4Vfp)
+
+### Database Schema
+![Database Schema](db_schema.png "DB Schema")
 
 ### System Design
 ![System Design](system_design.png "System Design")
