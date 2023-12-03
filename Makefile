@@ -12,3 +12,6 @@ migrate-down:
 
 start:
 	@go run main.go
+
+test:
+	@go test -v ./cmd/api/handlers_test/...

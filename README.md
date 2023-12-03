@@ -5,7 +5,7 @@ The Go Monstérdex App is a simple yet comprehensive application that serves as 
 - User Authentication: Create an account or log in securely.
 - Token-Based Authentication: Secure API endpoints.
 - Monstér Database: Access detailed information about hundreds of Monstér species.
-- Search Functionality: Search for Pokémon by name, type, or other attributes.
+- Search Functionality: Search for Monstér by name, type, or other attributes.
 - Catch & Release: User can catch monster and release.
 
 ## Tech Specifications
@@ -32,6 +32,9 @@ The project follows a clean architecture pattern, separating concerns into diffe
 ### Postman
 [API Specification](https://documenter.getpostman.com/view/28576845/2s9YeK4Vfp)
 
+### System Design
+[System Design](system_design.png "System Design")
+
 ## Quick Start
 ### Clone App
 ```
@@ -40,7 +43,7 @@ git clone https://github.com/DitoAdriel99/go-monsterdex.git
 ### Set ENV
 Change .env.example to .env
 
-### Running
+### Running App
 if use docker
 ```
 docker compose up -d
@@ -48,6 +51,13 @@ docker compose up -d
 if use Makefile
 ```
 make start
+```
+
+### Runnnig Unit Test
+*note: app must be running first
+if use Makefile
+```
+make test
 ```
 ### Link Demo
 ```
