@@ -6,7 +6,7 @@ The Go Monstérdex App is a simple yet comprehensive application that serves as 
 - Token-Based Authentication: Secure API endpoints.
 - Monstér Database: Access detailed information about hundreds of Monstér species.
 - Search Functionality: Search for Monstér by name, type, or other attributes.
-- Catch & Release: User can catch monster and release.
+- Catch & Release: User can catch Monstér and release.
 
 ## Tech Specifications
 ### Stack
