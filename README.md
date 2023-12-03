@@ -33,7 +33,7 @@ The project follows a clean architecture pattern, separating concerns into diffe
 [API Specification](https://documenter.getpostman.com/view/28576845/2s9YeK4Vfp)
 
 ### System Design
-[System Design](system_design.png "System Design")
+![System Design](system_design.png "System Design")
 
 ## Quick Start
 ### Clone App
