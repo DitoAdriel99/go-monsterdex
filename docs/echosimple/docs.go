@@ -292,11 +292,11 @@ const docTemplate = `{
                 }
             }
         },
-        "/check-health": {
+        "/health-check": {
             "get": {
                 "description": "Check server is running",
                 "summary": "Check Health",
-                "operationId": "check-health",
+                "operationId": "health-check",
                 "responses": {}
             }
         }

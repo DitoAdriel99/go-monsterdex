@@ -243,10 +243,10 @@ paths:
         "201":
           description: Created
       summary: Register User
-  /check-health:
+  /health-check:
     get:
       description: Check server is running
-      operationId: check-health
+      operationId: health-check
       responses: {}
       summary: Check Health
 schemes:
