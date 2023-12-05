@@ -2,30 +2,26 @@ package monster
 
 import (
 	"context"
-	"os"
 
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/presentation"
-	"github.com/DitoAdriel99/go-monsterdex/pkg/jwt_parse"
-	"github.com/DitoAdriel99/go-monsterdex/pkg/storage"
 )
 
 func (s *_Service) GetID(bearer string, monsterID int) (*presentation.Monster, error) {
-	claims, err := jwt_parse.GetClaimsFromToken(bearer)
+	claims, err := s.token.GetClaimsFromToken(bearer)
 	if err != nil {
 		return nil, err
 	}
-
 	data, err := s.repo.MonsterRepo.GetID(claims.ID, monsterID)
 	if err != nil {
 		return nil, err
 	}
 
-	url, err := storage.SignedURL(context.Background(), os.Getenv("GCS_BUCKET"), data.Image)
+	url, err := s.gcs.Get(context.Background(), s.cfg.GCS.Storage.Bucket, data.Image)
 	if err != nil {
 		return nil, err
 	}
 
-	data.Image = *url
+	data.Image = string(url)
 
 	return data, nil
 }

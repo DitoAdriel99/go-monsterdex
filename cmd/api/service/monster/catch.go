@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
-	"github.com/DitoAdriel99/go-monsterdex/pkg/jwt_parse"
 )
 
 func (s *_Service) Catch(bearer string, monsterID int) (*bool, error) {
@@ -13,7 +12,7 @@ func (s *_Service) Catch(bearer string, monsterID int) (*bool, error) {
 		timeNow = time.Now().Local()
 	)
 
-	claims, err := jwt_parse.GetClaimsFromToken(bearer)
+	claims, err := s.token.GetClaimsFromToken(bearer)
 	if err != nil {
 		return nil, err
 	}

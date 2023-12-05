@@ -1,16 +1,15 @@
 package router
 
 import (
-	"github.com/DitoAdriel99/go-monsterdex/bootstrap"
-	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
+	"github.com/DitoAdriel99/go-monsterdex/cmd/api/dependency"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/handlers"
 	authHandl "github.com/DitoAdriel99/go-monsterdex/cmd/api/handlers/auth"
 	monsterHandl "github.com/DitoAdriel99/go-monsterdex/cmd/api/handlers/monster"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/repository"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/service"
+	"github.com/DitoAdriel99/go-monsterdex/config"
+	"github.com/DitoAdriel99/go-monsterdex/pkg/tokenizer"
 
-	// _ "github.com/DitoAdriel99/go-monsterdex/docs/echosimple"
-	midd "github.com/DitoAdriel99/go-monsterdex/middleware"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
@@ -19,10 +18,11 @@ import (
 
 func New() *echo.Echo {
 	e := echo.New()
+	conf := config.PopulateConfigFromEnv()
 	repo := repository.NewRepo()
-	rdb := bootstrap.NewRedisClient()
+	dep := dependency.NewDependency(conf)
 
-	serv := service.NewService(repo, rdb)
+	serv := service.NewService(conf, repo, dep.Redis, dep.GcsClient, dep.Token)
 
 	// declare handlers
 	authHandlers := authHandl.NewHandlers(serv)
@@ -43,15 +43,15 @@ func New() *echo.Echo {
 
 	api := e.Group("/api/v1")
 	api.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		Claims:     &entity.Claims{},
-		SigningKey: entity.JWTKEY,
+		Claims:     &tokenizer.Claims{},
+		SigningKey: []byte(conf.JWT.Key),
 	}))
 
-	api.POST("/monster", monsterHandlers.CreateMonsterHandler, midd.RBAC("admin"))
-	api.GET("/monsters", monsterHandlers.GetMonstersHandler, midd.RBAC("admin", "user"))
-	api.PUT("/monster/:id", monsterHandlers.UpdateMonsterHandler, midd.RBAC("admin"))
-	api.PUT("/monster/status/:id", monsterHandlers.SetStatusMonsterHandler, midd.RBAC("admin"))
-	api.POST("/monster/catch/:id", monsterHandlers.CatchMonsterHandler, midd.RBAC("user"))
+	api.POST("/monster", monsterHandlers.CreateMonsterHandler, dep.RBAC.Validate("admin"))
+	api.GET("/monsters", monsterHandlers.GetMonstersHandler, dep.RBAC.Validate("admin", "user"))
+	api.PUT("/monster/:id", monsterHandlers.UpdateMonsterHandler, dep.RBAC.Validate("admin"))
+	api.PUT("/monster/status/:id", monsterHandlers.SetStatusMonsterHandler, dep.RBAC.Validate("admin"))
+	api.POST("/monster/catch/:id", monsterHandlers.CatchMonsterHandler, dep.RBAC.Validate("user"))
 	// Serve Swagger documentation
 	e.GET("/*", echoSwagger.WrapHandler)
 

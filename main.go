@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/router"
 	_ "github.com/DitoAdriel99/go-monsterdex/docs/echosimple"
+	"github.com/joho/godotenv"
 )
 
 // @title Monsterdex Enpoints
@@ -25,6 +27,9 @@ import (
 // @BasePath /
 // @schemes http
 func main() {
+	if err := godotenv.Load(); err != nil && !os.IsNotExist(err) {
+		log.Fatalf("err loading: %v", err)
+	}
 	e := router.New()
 	server := &http.Server{
 		Addr:    fmt.Sprintf("0.0.0.0:%s", os.Getenv("PORT")),

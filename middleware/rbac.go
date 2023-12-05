@@ -1,18 +1,26 @@
 package middleware
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 
-	"github.com/DitoAdriel99/go-monsterdex/pkg/jwt_parse"
+	"github.com/DitoAdriel99/go-monsterdex/pkg/tokenizer"
 	"github.com/labstack/echo/v4"
 )
 
-func RBAC(roles ...string) echo.MiddlewareFunc {
+type RBAC struct {
+	Token tokenizer.JWT
+}
+
+func (r *RBAC) Validate(roles ...string) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
+			fmt.Println("claimss")
 			bearer := c.Request().Header.Get("Authorization")
-			claims, err := jwt_parse.GetClaimsFromToken(bearer)
+			claims, err := r.Token.GetClaimsFromToken(bearer)
 			if err != nil {
+				log.Println("error get claims from token", err)
 				return c.JSON(http.StatusForbidden, map[string]interface{}{
 					"Message": err,
 				})
@@ -30,6 +38,7 @@ func RBAC(roles ...string) echo.MiddlewareFunc {
 
 			// If the user's role doesn't match any of the specified roles, deny access
 			if !roleMatch {
+				log.Println("Access Denied")
 				return c.JSON(http.StatusForbidden, map[string]interface{}{
 					"Message": "Access Denied",
 				})

@@ -45,16 +45,16 @@ VALUES ('Fire Lizard', NOW(), NOW()),
 ('Mystic Sphinx', NOW(), NOW());
 
 INSERT INTO monsters (name, monster_category_id, description, image, types_id, height, weight, stats_hp, stats_attack, stats_defense, stats_speed, is_active, created_at, updated_at)
-VALUES ('Charizard', 1, 'A fiery dragon-like creature', 'charizard.png', ARRAY[1, 6], 1.7, 90.5, 78, 84, 78, 100, true, NOW(), NOW()),
-('Blastoise', 2, 'A powerful water-based tortoise', 'blastoise.png', ARRAY[2], 1.6, 85.5, 79, 83, 100, 78, true, NOW(), NOW()),
-('Pikachu', 3, 'An electric rodent Pokémon', 'pikachu.png', ARRAY[4], 0.4, 6.0, 35, 55, 40, 90, true, NOW(), NOW()),
-('Venusaur', 1, 'A grass-based dinosaur', 'venusaur.png', ARRAY[5, 6], 2.0, 100.0, 80, 82, 83, 80, true, NOW(), NOW()),
-('Gyarados', 2, 'A fearsome water/flying serpent', 'gyarados.png', ARRAY[2, 6], 6.5, 235.0, 95, 125, 79, 81, true, NOW(), NOW()),
-('Alakazam', 7, 'A psychic Pokémon with psychic spoons', 'alakazam.png', ARRAY[12], 1.5, 48.0, 55, 50, 45, 120, true, NOW(), NOW()),
-('Gengar', 13, 'A mischievous ghostly creature', 'gengar.png', ARRAY[13, 14], 1.5, 40.5, 60, 65, 60, 110, true, NOW(), NOW()),
-('Dragonite', 12, 'A majestic dragon-type Pokémon', 'dragonite.png', ARRAY[16, 6], 2.2, 210.0, 91, 134, 95, 80, true, NOW(), NOW()),
-('Mewtwo', 14, 'A genetically created psychic Pokémon', 'mewtwo.png', ARRAY[12], 2.0, 122.0, 106, 110, 90, 130, true, NOW(), NOW()),
-('Arceus', 18, 'A legendary deity Pokémon', 'arceus.png', ARRAY[17], 3.2, 320.0, 120, 120, 120, 120, true, NOW(), NOW());
+VALUES ('Charizard', 1, 'A fiery dragon-like creature', 'monsterdex/c3ace512-49b9-4905-bc1b-d1ac2ee70481.png', ARRAY[1, 6], 1.7, 90.5, 78, 84, 78, 100, true, NOW(), NOW()),
+('Blastoise', 2, 'A powerful water-based tortoise', 'monsterdex/c3ace512-49b9-4905-bc1b-d1ac2ee70481.png', ARRAY[2], 1.6, 85.5, 79, 83, 100, 78, true, NOW(), NOW()),
+('Pikachu', 3, 'An electric rodent Pokémon', 'monsterdex/c3ace512-49b9-4905-bc1b-d1ac2ee70481.png', ARRAY[4], 0.4, 6.0, 35, 55, 40, 90, true, NOW(), NOW()),
+('Venusaur', 1, 'A grass-based dinosaur', 'monsterdex/c3ace512-49b9-4905-bc1b-d1ac2ee70481.png', ARRAY[5, 6], 2.0, 100.0, 80, 82, 83, 80, true, NOW(), NOW()),
+('Gyarados', 2, 'A fearsome water/flying serpent', 'monsterdex/c3ace512-49b9-4905-bc1b-d1ac2ee70481.png', ARRAY[2, 6], 6.5, 235.0, 95, 125, 79, 81, true, NOW(), NOW()),
+('Alakazam', 7, 'A psychic Pokémon with psychic spoons', 'monsterdex/c3ace512-49b9-4905-bc1b-d1ac2ee70481.png', ARRAY[12], 1.5, 48.0, 55, 50, 45, 120, true, NOW(), NOW()),
+('Gengar', 13, 'A mischievous ghostly creature', 'monsterdex/c3ace512-49b9-4905-bc1b-d1ac2ee70481.png', ARRAY[13, 14], 1.5, 40.5, 60, 65, 60, 110, true, NOW(), NOW()),
+('Dragonite', 12, 'A majestic dragon-type Pokémon', 'monsterdex/c3ace512-49b9-4905-bc1b-d1ac2ee70481.png', ARRAY[16, 6], 2.2, 210.0, 91, 134, 95, 80, true, NOW(), NOW()),
+('Mewtwo', 14, 'A genetically created psychic Pokémon', 'monsterdex/c3ace512-49b9-4905-bc1b-d1ac2ee70481.png', ARRAY[12], 2.0, 122.0, 106, 110, 90, 130, true, NOW(), NOW()),
+('Arceus', 18, 'A legendary deity Pokémon', 'monsterdex/c3ace512-49b9-4905-bc1b-d1ac2ee70481.png', ARRAY[17], 3.2, 320.0, 120, 120, 120, 120, true, NOW(), NOW());
 -- +goose StatementEnd
 
 -- +goose Down

@@ -4,7 +4,10 @@ import (
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/presentation"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/repository"
+	"github.com/DitoAdriel99/go-monsterdex/config"
 	"github.com/DitoAdriel99/go-monsterdex/pkg/meta"
+	"github.com/DitoAdriel99/go-monsterdex/pkg/storage"
+	"github.com/DitoAdriel99/go-monsterdex/pkg/tokenizer"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -18,10 +21,13 @@ type Contract interface {
 }
 
 type _Service struct {
-	repo *repository.Repo
-	rdb  *redis.Client
+	cfg   config.Cfg
+	repo  *repository.Repo
+	rdb   *redis.Client
+	gcs   storage.Storage
+	token tokenizer.JWT
 }
 
-func NewService(repo *repository.Repo, rdb *redis.Client) Contract {
-	return &_Service{repo, rdb}
+func NewService(cfg config.Cfg, repo *repository.Repo, rdb *redis.Client, gcs storage.Storage, token tokenizer.JWT) Contract {
+	return &_Service{cfg, repo, rdb, gcs, token}
 }

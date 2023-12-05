@@ -6,12 +6,10 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 	"time"
 
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
-	"github.com/DitoAdriel99/go-monsterdex/pkg/storage"
 	"github.com/DitoAdriel99/go-monsterdex/rules"
 	"github.com/google/uuid"
 )
@@ -65,21 +63,21 @@ func (s *_Service) Create(req *entity.MonsterPayload) (*entity.Monster, error) {
 		return nil, err
 	}
 
-	objectName := fmt.Sprintf("%s%s.%s", os.Getenv("GCS_PREFIX"), uuid.New(), mType)
+	objectName := fmt.Sprintf("%s%s.%s", s.cfg.GCS.Storage.Prefix, uuid.New(), mType)
 
 	// Use a channel to communicate completion of the upload
 	uploadComplete := make(chan *string)
 	defer close(uploadComplete)
 
 	go func() {
-		imageStore, err := storage.StoreDataToGCS(context.Background(), os.Getenv("GCS_BUCKET"), objectName, decoded, false, mType)
+		err := s.gcs.Put(context.Background(), s.cfg.GCS.Storage.Bucket, objectName, decoded, false, mType)
 		if err != nil {
 			log.Printf("error storedata to gcs", err)
 			uploadComplete <- nil
 			return
 		}
 
-		uploadComplete <- imageStore
+		uploadComplete <- &objectName
 	}()
 
 	select {
@@ -101,14 +99,14 @@ func (s *_Service) Create(req *entity.MonsterPayload) (*entity.Monster, error) {
 		return nil, err
 	}
 
-	signedUrl, err := storage.SignedURL(context.Background(), os.Getenv("GCS_BUCKET"), objectName)
+	signedUrl, err := s.gcs.ResignUrl(context.Background(), s.cfg.GCS.Storage.Bucket, objectName)
 	if err != nil {
 		log.Printf("error signed to gcs", err)
 		return nil, err
 	}
 
 	data.ID = currId
-	data.Image = *signedUrl
+	data.Image = signedUrl
 
 	return &data, nil
 }

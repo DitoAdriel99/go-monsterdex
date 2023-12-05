@@ -27,6 +27,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
+	"github.com/DitoAdriel99/go-monsterdex/config"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 )
@@ -37,12 +38,13 @@ var _ Storage = (*gcs)(nil)
 // gcs implements the Blob interface and provides the ability
 // write files to Google Cloud Storage.
 type gcs struct {
+	cfg    config.Cfg
 	client *storage.Client
 }
 
 // NewGCS creates a Google Cloud Storage Client
-func NewGCS(ctx context.Context) (Storage, error) {
-	credOpt := option.WithCredentialsFile(os.Getenv("ACCOUNT_PATH"))
+func NewGCS(ctx context.Context, cfg config.Cfg) (Storage, error) {
+	credOpt := option.WithCredentialsFile(cfg.GCS.AccountPath)
 
 	client, err := storage.NewClient(ctx, credOpt)
 	if err != nil {
@@ -51,10 +53,10 @@ func NewGCS(ctx context.Context) (Storage, error) {
 
 	// Stat bucket if not exist create a new one.
 	// https://cloud.google.com/storage/docs/creating-buckets#storage-create-bucket-go
-	_, err = client.Bucket(os.Getenv("GCS_BUCKET")).Attrs(ctx)
+	_, err = client.Bucket(cfg.GCS.Storage.Bucket).Attrs(ctx)
 	if err != nil {
 		if errors.Is(err, storage.ErrBucketNotExist) {
-			err = client.Bucket(os.Getenv("GCS_BUCKET")).Create(ctx, os.Getenv("PROJECTID"), nil)
+			err = client.Bucket(cfg.GCS.Storage.Bucket).Create(ctx, cfg.GCS.ProjectID, nil)
 			if err != nil {
 				return nil, fmt.Errorf("storage.Bucket.Create: %w", err)
 			}
@@ -63,7 +65,7 @@ func NewGCS(ctx context.Context) (Storage, error) {
 		}
 	}
 
-	return &gcs{client}, nil
+	return &gcs{cfg, client}, nil
 }
 
 // Put creates a new cloud storage object or overwrites an existing one.
@@ -127,7 +129,7 @@ func (s *gcs) Get(ctx context.Context, bucket, object string) ([]byte, error) {
 
 // // ResignUrl returns the URL for the given object.
 func (s *gcs) ResignUrl(ctx context.Context, bucket, objectName string) (string, error) {
-	saKey, err := ioutil.ReadFile(os.Getenv("ACCOUNT_PATH"))
+	saKey, err := ioutil.ReadFile(s.cfg.GCS.AccountPath)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -177,47 +179,4 @@ func createFileContent(baseName string, r *storage.Reader) error {
 	}
 
 	return nil
-}
-func StoreDataToGCS(ctx context.Context, bucket, objectName string, contents []byte, cacheable bool, contentType string) (*string, error) {
-	gcs, err := NewGCS(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	err = gcs.Put(ctx, bucket, objectName, contents, false, fmt.Sprintf("image/%s", contentType))
-	if err != nil {
-		return nil, err
-	}
-
-	return &objectName, nil
-}
-
-func SignedURL(ctx context.Context, bucket, objectName string) (*string, error) {
-	gcs, err := NewGCS(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	url, err := gcs.ResignUrl(ctx, bucket, objectName)
-	if err != nil {
-		return nil, err
-	}
-
-	return &url, nil
-}
-
-func GetURL(ctx context.Context, bucket, objectName string) (*string, error) {
-	gcs, err := NewGCS(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	url, err := gcs.Get(ctx, bucket, objectName)
-	if err != nil {
-		return nil, err
-	}
-
-	urlString := string(url)
-
-	return &urlString, nil
 }

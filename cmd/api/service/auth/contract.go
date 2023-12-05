@@ -2,6 +2,8 @@ package auth
 
 import (
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/repository"
+	"github.com/DitoAdriel99/go-monsterdex/config"
+	"github.com/DitoAdriel99/go-monsterdex/pkg/tokenizer"
 
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
 )
@@ -12,9 +14,11 @@ type Contract interface {
 }
 
 type _Service struct {
-	repo *repository.Repo
+	cfg   config.Cfg
+	repo  *repository.Repo
+	token tokenizer.JWT
 }
 
-func NewAuthService(repo *repository.Repo) Contract {
-	return &_Service{repo}
+func NewAuthService(cfg config.Cfg, repo *repository.Repo, token tokenizer.JWT) Contract {
+	return &_Service{cfg, repo, token}
 }

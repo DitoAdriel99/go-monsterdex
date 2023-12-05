@@ -5,11 +5,9 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
-	"github.com/DitoAdriel99/go-monsterdex/pkg/storage"
 	"github.com/DitoAdriel99/go-monsterdex/rules"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
@@ -71,19 +69,19 @@ func (s *_Service) Update(monsterID int, req *entity.MonsterPayload) (*entity.Mo
 			return nil, err
 		}
 
-		objectName := fmt.Sprintf("%s%s.%s", os.Getenv("GCS_PREFIX"), uuid.New(), mType)
+		objectName := fmt.Sprintf("%s%s.%s", s.cfg.GCS.Storage.Prefix, uuid.New(), mType)
 
 		// Use a channel to communicate completion of the upload
 
 		go func() {
-			imageStore, err := storage.StoreDataToGCS(context.Background(), os.Getenv("GCS_BUCKET"), objectName, decoded, false, mType)
+			err := s.gcs.Put(context.Background(), s.cfg.GCS.Storage.Bucket, objectName, decoded, false, mType)
 			if err != nil {
 				log.Printf("error storedata to gcs", err)
 				uploadComplete <- nil
 				return
 			}
 
-			uploadComplete <- imageStore
+			uploadComplete <- &objectName
 		}()
 		select {
 		case imageStore := <-uploadComplete:

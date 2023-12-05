@@ -4,19 +4,17 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
+	"github.com/DitoAdriel99/go-monsterdex/config"
 	"github.com/go-redis/redis/v8"
 )
 
-func NewRedisClient() *redis.Client {
-	redisHost := os.Getenv("REDIS_HOST")
-	redisPassword := os.Getenv("REDIS_PASSWORD")
+func NewRedisClient(cfg config.Cfg) *redis.Client {
 
 	// Create a Redis client
 	client := redis.NewClient(&redis.Options{
-		Addr:     redisHost,
-		Password: redisPassword,
+		Addr:     cfg.Redis.Host,
+		Password: cfg.Redis.Password,
 		DB:       0,
 	})
 

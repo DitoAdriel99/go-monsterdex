@@ -3,20 +3,17 @@ package monster
 import (
 	"context"
 	"fmt"
-	"os"
 	"sync"
 	"time"
 
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/entity"
 	"github.com/DitoAdriel99/go-monsterdex/cmd/api/presentation"
-	"github.com/DitoAdriel99/go-monsterdex/pkg/jwt_parse"
 	"github.com/DitoAdriel99/go-monsterdex/pkg/meta"
-	"github.com/DitoAdriel99/go-monsterdex/pkg/storage"
 	"github.com/go-redis/redis/v8"
 )
 
 func (s *_Service) Get(bearer string, m *meta.Metadata) (*presentation.Monsters, error) {
-	claims, err := jwt_parse.GetClaimsFromToken(bearer)
+	claims, err := s.token.GetClaimsFromToken(bearer)
 	if err != nil {
 		return nil, err
 	}
@@ -36,13 +33,13 @@ func (s *_Service) Get(bearer string, m *meta.Metadata) (*presentation.Monsters,
 			ctx := context.Background()
 			urlRedis, err := checkRedisData(ctx, s.rdb, fmt.Sprintf("%s%d", entity.MonsterRedisKey, (*data)[i].ID))
 			if err == redis.Nil {
-				url, err := storage.SignedURL(ctx, os.Getenv("GCS_BUCKET"), (*data)[i].Image)
+				url, err := s.gcs.ResignUrl(ctx, s.cfg.GCS.Storage.Bucket, (*data)[i].Image)
 				if err != nil {
 					errCh <- err
 					return
 				}
-				urlCh <- *url
-				chacheData(ctx, s.rdb, fmt.Sprintf("%s%d", entity.MonsterRedisKey, (*data)[i].ID), *url)
+				urlCh <- url
+				chacheData(ctx, s.rdb, fmt.Sprintf("%s%d", entity.MonsterRedisKey, (*data)[i].ID), url)
 			} else {
 				urlCh <- urlRedis
 			}
